@@ -11,16 +11,16 @@ import io.github.andrewmatzureff.arg.input.KeyState;
 
 import java.util.Map;
 
-public class GameplayInputCommandDispatchSystem extends IteratingSystem {
+public class GameplayInputCommandAdapterSystem extends IteratingSystem {
 
     private final Map<KeyState, Command> keyBindings = Map.of(
         KeyState.Type.HELD.asKeyState(Input.Keys.A), Command.MOVE_LEFT,
         KeyState.Type.HELD.asKeyState(Input.Keys.D), Command.MOVE_RIGHT,
         KeyState.Type.HELD.asKeyState(Input.Keys.W), Command.MOVE_UP,
         KeyState.Type.HELD.asKeyState(Input.Keys.S), Command.MOVE_DOWN,
-        KeyState.Type.PRESSED.asKeyState(Input.Keys.SPACE), Command.JUMP);
+        KeyState.Type.HELD.asKeyState(Input.Keys.SPACE), Command.JUMP);
 
-    public GameplayInputCommandDispatchSystem() {
+    public GameplayInputCommandAdapterSystem() {
         super(Family.all(KeyboardBuffer.class, GameplayCommandBuffer.class).get());
     }
 

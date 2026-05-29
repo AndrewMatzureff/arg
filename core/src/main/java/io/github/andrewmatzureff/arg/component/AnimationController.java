@@ -27,6 +27,8 @@ public class AnimationController implements Component {
     private float stateTime;
     @Getter
     private int animationState;
+    @Setter
+    private boolean looping;
     public void setAnimationState(int animationState) {
         this.animationState = animationState;
         this.stateTime = 0;
@@ -34,11 +36,14 @@ public class AnimationController implements Component {
     public void tick(float deltaTime) {
         this.stateTime += deltaTime;
     }
-    public TextureRegion getFrame(boolean loop) {
-        return animations.get(animationState).getKeyFrame(stateTime, loop);
+    public TextureRegion getFrame() {
+        return animations.get(animationState).getKeyFrame(stateTime, looping);
     }
 
-    // static
+    public boolean isFinished() {return animations.get(animationState).isAnimationFinished(stateTime);}
+
+    // static \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
     public static final ComponentMapper<AnimationController> MAPPER = ComponentMapper.getFor(AnimationController.class);
     public static final int FRAME_ROWS = 7;
     public static final int IDLE_WALK = 0, WALK = 1, AIM = 2, FIRE = 3, RELOAD = 4, RUN = 5, JUMP = 6;

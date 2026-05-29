@@ -12,11 +12,11 @@ import lombok.Getter;
 
 import java.util.*;
 
-public class GameplayInputAdapter extends InputAdapter {
+public class GameplayDeviceInputAdapter extends InputAdapter {
     @Getter
     private final ImmutableArray<Entity> entities;
 
-    public GameplayInputAdapter(Engine engine) {
+    public GameplayDeviceInputAdapter(Engine engine) {
         this.entities = engine.getEntitiesFor(Family.all(KeyboardBuffer.class).get());
     }
 

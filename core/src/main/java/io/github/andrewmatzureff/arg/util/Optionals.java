@@ -1,7 +1,6 @@
 package io.github.andrewmatzureff.arg.util;
 
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 
 public interface Optionals {
     static <T> UnaryOperator<T> peek(Consumer<T> observer) {
@@ -9,5 +8,9 @@ public interface Optionals {
             observer.accept(t);
             return t;
         };
+    }
+
+    static <T, U, R> Function<T, R> map(U arg, BiFunction<T, U, R> biFunction) {
+        return self -> biFunction.apply(self, arg);
     }
 }

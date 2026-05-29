@@ -7,8 +7,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Disposable;
 import io.github.andrewmatzureff.arg.GDXGame;
 import io.github.andrewmatzureff.arg.component.*;
-import io.github.andrewmatzureff.arg.input.GameplayInputAdapter;
+import io.github.andrewmatzureff.arg.component.mob.Jump;
+import io.github.andrewmatzureff.arg.component.mob.Move;
+import io.github.andrewmatzureff.arg.input.GameplayDeviceInputAdapter;
 import io.github.andrewmatzureff.arg.system.*;
+import io.github.andrewmatzureff.arg.mob.MobIdleState;
 
 import java.util.Arrays;
 
@@ -20,9 +23,9 @@ public class GameScreen implements Screen {
 
     private final Engine engine;
     private final GDXGame game;
-    private final GameplayInputAdapter gameplayInputAdapter;
-    private final GameplayInputCommandDispatchSystem gameplayInputCommandDispatchSystem;
-    private final StateManagerSystem stateManagerSystem;
+    private final GameplayDeviceInputAdapter gameplayDeviceInputAdapter;
+    private final GameplayInputCommandAdapterSystem gameplayInputCommandAdapterSystem;
+    private final CommandHandlerSystem commandHandlerSystem;
     private final GameplayMovementHandlerSystem gameplayMovementHandlerSystem;
     private final AnimationSystem animationSystem;
     private final ThingRendererSystem thingRendererSystem;
@@ -30,15 +33,15 @@ public class GameScreen implements Screen {
     public GameScreen(GDXGame game) {
         this.game = game;
         this.engine = new Engine();
-        this.gameplayInputAdapter = new GameplayInputAdapter(engine);
-        this.gameplayInputCommandDispatchSystem = new GameplayInputCommandDispatchSystem();
-        this.stateManagerSystem = new StateManagerSystem();
+        this.gameplayDeviceInputAdapter = new GameplayDeviceInputAdapter(engine);
+        this.gameplayInputCommandAdapterSystem = new GameplayInputCommandAdapterSystem();
+        this.commandHandlerSystem = new CommandHandlerSystem();
         this.gameplayMovementHandlerSystem = new GameplayMovementHandlerSystem();
         this.animationSystem = new AnimationSystem();
         this.thingRendererSystem = new ThingRendererSystem(game.getBatch());
 
-        this.engine.addSystem(gameplayInputCommandDispatchSystem);
-        this.engine.addSystem(stateManagerSystem);
+        this.engine.addSystem(gameplayInputCommandAdapterSystem);
+        this.engine.addSystem(commandHandlerSystem);
         this.engine.addSystem(gameplayMovementHandlerSystem);
         this.engine.addSystem(animationSystem);
         this.engine.addSystem(thingRendererSystem);
@@ -46,18 +49,21 @@ public class GameScreen implements Screen {
         final Entity player = engine.createEntity()
             .add(new KeyboardBuffer())
             .add(new GameplayCommandBuffer())
+            .add(new StateManager())
+            .add(new Jump())
             .add(new Move())
             .add(new Transform())
             .add(new AnimationController())
             .add(new SpriteRenderer());
 
+        StateManager.MAPPER.get(player).setState(new MobIdleState(player));
         this.engine.addEntity(player);
 
     }
 
     @Override
     public void show() {
-        game.setInputProcessors(gameplayInputAdapter);
+        game.setInputProcessors(gameplayDeviceInputAdapter);
     }
 
     @Override

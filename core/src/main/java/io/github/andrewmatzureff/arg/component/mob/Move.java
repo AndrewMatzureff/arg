@@ -1,8 +1,7 @@
-package io.github.andrewmatzureff.arg.component;
+package io.github.andrewmatzureff.arg.component.mob;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import io.github.andrewmatzureff.arg.util.CopyPool;
 import lombok.Getter;
@@ -21,6 +20,7 @@ public class Move implements Component {
     private float multiplicativeDamping = 1;
     @Getter @Setter
     private float dampingThreshold = 0;
+    @Getter @Setter
     private float speed = 1;
     public Vector2 getDirection() {return copy.obtain(direction);}
     public void setDirection(Vector2 direction) {
