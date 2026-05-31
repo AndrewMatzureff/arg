@@ -28,8 +28,7 @@ public record MobWalkState(Entity entity) implements MobState {
             case MOVE_LEFT -> Move.MAPPER.get(entity).accumulate(-1, 0);
             case MOVE_RIGHT -> Move.MAPPER.get(entity).accumulate(1, 0);
             case JUMP -> {
-                stateManager.setState(create(MobJumpState::new));
-                stateManager.getState().handle(command);
+                transition(MobJumpState::new).handle(command);
             }
             default -> {}
         }
@@ -41,8 +40,7 @@ public record MobWalkState(Entity entity) implements MobState {
             .map(Move.MAPPER::get)
             .map(Move::getDirection)
             .filter(v -> isZero(v.x, 0.1f))
-            .ifPresent(__ -> StateManager.MAPPER.get(entity)
-                .setState(create(MobIdleState::new)));
+            .ifPresent(__ -> transition(MobIdleState::new));
     }
 
     @Override

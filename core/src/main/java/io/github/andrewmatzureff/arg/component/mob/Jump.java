@@ -8,13 +8,21 @@ import lombok.Setter;
 public class Jump implements Component {
     public static final ComponentMapper<Jump> MAPPER = ComponentMapper.getFor(Jump.class);
 
+    private int delayMillis = 200;
+    private long triggerTimeMillis = Long.MAX_VALUE;
+
     @Getter @Setter
     private float gravity = 0;
 
-    @Getter @Setter
-    private boolean triggered;
+    public void setTriggered(boolean triggered) {
+        triggerTimeMillis = triggered
+            ? System.currentTimeMillis()
+            : isTriggered() ? Long.MAX_VALUE : triggerTimeMillis;
+    }
 
-    public boolean isNotTriggered(){return !triggered;}
+    public boolean isTriggered() {return System.currentTimeMillis() - triggerTimeMillis >= delayMillis;}
+
+    public boolean isNotTriggered(){return !isTriggered();}
 
 //    private final Vector2 direction = new Vector2();
 //    private final CopyPool<Vector2> copy = new CopyPool<>(true, Vector2::cpy, Vector2::set);

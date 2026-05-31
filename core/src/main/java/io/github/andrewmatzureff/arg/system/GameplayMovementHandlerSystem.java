@@ -20,11 +20,11 @@ public class GameplayMovementHandlerSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         final var move = Move.MAPPER.get(entity);
-        move.setMultiplicativeDamping(0.75f);
+        move.setMultiplicativeDamping(0.9f);
         final var transform = Transform.MAPPER.get(entity);
         // TODO: move or get rid of...
-        move.setSpeed(0.5f);
-        move.accumulate(0, -3f);
+        move.setSpeed(0.25f);
+        move.accumulate(0, -5f);
         if (transform.getPosition().y < 0) {
             transform.setPosition(transform.getPosition().x, 0);
 //            move.setDirection(move.getDirection().set(move.getDirection().x, 0));

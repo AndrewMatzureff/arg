@@ -15,11 +15,11 @@ public record MobJumpState(Entity entity) implements MobState {
 
     @Override
     public void enter() {
-        if (StateManager.MAPPER.get(entity).hasState(this)) return;
         Optional.of(entity)
             .map(AnimationController.MAPPER::get)
-            .map(Optionals.peek(controller -> controller.setAnimationState(AnimationController.JUMP)))
-            .ifPresent(controller -> controller.setLooping(false));
+            .map(Optionals.peek(ac -> ac.setAnimationState(AnimationController.JUMP)))
+            .ifPresent(ac -> ac.setLooping(false));
+
         Optional.of(entity)
             .map(Jump.MAPPER::get)
             .ifPresent(jump -> jump.setTriggered(true));
@@ -28,12 +28,8 @@ public record MobJumpState(Entity entity) implements MobState {
     @Override
     public void handle(Command command) {
         final var stateManager  = StateManager.MAPPER.get(entity);
-        if (command == Command.JUMP) {
-        }
 
         switch (command) {
-//            stateManager.setState(create(MobWalkState::new));
-//            stateManager.getState().handle(command);
             case MOVE_LEFT -> Move.MAPPER.get(entity).accumulate(-0.5f, 0);
             case MOVE_RIGHT -> Move.MAPPER.get(entity).accumulate(0.5f, 0);
         }
@@ -46,12 +42,11 @@ public record MobJumpState(Entity entity) implements MobState {
         final var animationController = AnimationController.MAPPER.get(entity);
         final var stateManager = StateManager.MAPPER.get(entity);
         if (jump.isTriggered()) move.accumulate(0, 100);
-        if (animationController.isFinished()) stateManager.setState(create(MobIdleState::new));
+        if (animationController.isFinished()) transition(MobIdleState::new);
         jump.setTriggered(false);
     }
 
     @Override
     public void exit() {
-
     }
 }

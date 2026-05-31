@@ -20,13 +20,12 @@ public record MobIdleState(Entity entity) implements MobState {
 
     @Override
     public void handle(Command command) {
-        final var stateManager  = StateManager.MAPPER.get(entity);
         if (command == Command.MOVE_LEFT || command == Command.MOVE_RIGHT) {
-            stateManager.setState(create(MobWalkState::new));
-            stateManager.getState().handle(command);
+            transition(MobWalkState::new)
+                .handle(command);
         } else if (command == Command.JUMP) {
-            stateManager.setState(create(MobJumpState::new));
-            stateManager.getState().handle(command);
+            transition(MobJumpState::new)
+                .handle(command);
         }
     }
 
