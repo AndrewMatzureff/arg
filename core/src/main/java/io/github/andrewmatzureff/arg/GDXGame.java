@@ -24,7 +24,6 @@ public class GDXGame extends Game {
 
     public static final float WORLD_WIDTH = 16f;
     public static final float WORLD_HEIGHT = 9f;
-    public static final float UNIT_SCALE = 1f / 16f;
 
     @Getter
     private Batch batch;
@@ -86,6 +85,8 @@ public class GDXGame extends Game {
         glProfiler.reset();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
         super.render(); // Render current screen.
         Gdx.graphics.setTitle(
             "Arg - Draw Calls: %d, Mouse: (%d,%d)"

@@ -7,21 +7,13 @@ import io.github.andrewmatzureff.arg.util.CopyPool;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.badlogic.gdx.math.MathUtils.isZero;
-
 public class Move implements Component {
     public static final ComponentMapper<Move> MAPPER = ComponentMapper.getFor(Move.class);
 
     private final Vector2 direction = new Vector2();
     private final CopyPool<Vector2> copy = new CopyPool<>(true, Vector2::cpy, Vector2::set);
     @Getter @Setter
-    private float additiveDamping = 0;
-    @Getter @Setter
-    private float multiplicativeDamping = 1;
-    @Getter @Setter
-    private float dampingThreshold = 0;
-    @Getter @Setter
-    private float speed = 1;
+    private float speed = 30;
     public Vector2 getDirection() {return copy.obtain(direction);}
     public void setDirection(Vector2 direction) {
         this.direction.set(direction);

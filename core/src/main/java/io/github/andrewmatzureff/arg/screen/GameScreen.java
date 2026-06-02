@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Disposable;
 import io.github.andrewmatzureff.arg.GDXGame;
 import io.github.andrewmatzureff.arg.component.*;
+import io.github.andrewmatzureff.arg.component.DebugRigidBodyBox;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.GameplayDeviceInputAdapter;
@@ -17,9 +18,6 @@ import java.util.Arrays;
 
 /** First screen of the application. Displayed after the application is created. */
 public class GameScreen implements Screen {
-    private static final int[][] testMap = {
-        {}
-    };
 
     private final Engine engine;
     private final GDXGame game;
@@ -28,7 +26,8 @@ public class GameScreen implements Screen {
     private final CommandHandlerSystem commandHandlerSystem;
     private final GameplayMovementHandlerSystem gameplayMovementHandlerSystem;
     private final AnimationSystem animationSystem;
-    private final ThingRendererSystem thingRendererSystem;
+    private final SpriteRendererSystem spriteRendererSystem;
+    private final PhysicsManager physicsManager;
 
     public GameScreen(GDXGame game) {
         this.game = game;
@@ -38,13 +37,14 @@ public class GameScreen implements Screen {
         this.commandHandlerSystem = new CommandHandlerSystem();
         this.gameplayMovementHandlerSystem = new GameplayMovementHandlerSystem();
         this.animationSystem = new AnimationSystem();
-        this.thingRendererSystem = new ThingRendererSystem(game.getBatch());
+        this.spriteRendererSystem = new SpriteRendererSystem(game.getBatch());
+        this.physicsManager = new PhysicsManager(game.getViewport());
 
         this.engine.addSystem(gameplayInputCommandAdapterSystem);
         this.engine.addSystem(commandHandlerSystem);
         this.engine.addSystem(gameplayMovementHandlerSystem);
         this.engine.addSystem(animationSystem);
-        this.engine.addSystem(thingRendererSystem);
+        this.engine.addSystem(spriteRendererSystem);
 
         final Entity player = engine.createEntity()
             .add(new KeyboardBuffer())
@@ -54,7 +54,9 @@ public class GameScreen implements Screen {
             .add(new Move())
             .add(new Transform())
             .add(new AnimationController())
-            .add(new SpriteRenderer());
+            .add(new SpriteRenderer())
+            .add(new RigidBodyBox(physicsManager.getWorld(), 1, 2))
+            .add(new DebugRigidBodyBox(physicsManager.getWorld(), 1000, 2));
 
         StateManager.MAPPER.get(player).setState(new MobIdleState(player));
         this.engine.addEntity(player);
@@ -76,6 +78,7 @@ public class GameScreen implements Screen {
         delta = Math.min(delta, 1f / 30);
         game.getCamera().zoom = 1;//(float) Math.sin(System.nanoTime() / 1000000000d)+1f;
         engine.update(delta);
+        physicsManager.tick(delta);
     }
 
     @Override

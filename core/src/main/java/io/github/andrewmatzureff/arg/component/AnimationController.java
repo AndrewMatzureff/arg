@@ -45,9 +45,9 @@ public class AnimationController implements Component {
     // static \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     public static final ComponentMapper<AnimationController> MAPPER = ComponentMapper.getFor(AnimationController.class);
-    public static final int FRAME_ROWS = 7;
-    public static final int IDLE_WALK = 0, WALK = 1, AIM = 2, FIRE = 3, RELOAD = 4, RUN = 5, JUMP = 6;
-    public static final int[] FRAME_COLS = {1,10,3,4,36,6,8};//{2,10,3,4,36,6,8};
+    public static final int FRAME_ROWS = 9;
+    public static final int IDLE_WALK = 0, WALK = 1, AIM = 2, FIRE = 3, RELOAD = 4, RUN = 5, JUMP = 6, FALL = 7, LAND = 8;
+    public static final int[] FRAME_COLS = {1,10,3,4,36,6,3,3,2};//{2,10,3,4,36,6,8};
 
     private static TextureRegion[][] trim(TextureRegion[][] frames) {
         IntStream.range(0, frames.length)

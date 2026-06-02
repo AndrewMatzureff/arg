@@ -2,7 +2,6 @@ package io.github.andrewmatzureff.arg.mob;
 
 import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.component.AnimationController;
-import io.github.andrewmatzureff.arg.component.StateManager;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.util.Optionals;
 

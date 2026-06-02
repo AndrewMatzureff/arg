@@ -1,0 +1,36 @@
+package io.github.andrewmatzureff.arg.system;
+
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import lombok.Getter;
+
+public class PhysicsManager {
+
+    @Getter
+    private final World world = new World(new Vector2(0, -10), true);
+    private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
+    private final float timeStep = 1 / 60f;
+    private final int velocityIterations = 6;
+    private final int positionIterations = 2;
+    private final Camera camera;
+    private float accumulator;
+
+    public PhysicsManager(Viewport viewport) {
+        this.camera = viewport.getCamera();
+        Box2D.init();
+    }
+
+    public void tick(float deltaTime) {
+        debugRenderer.render(world, camera.combined);
+        // fixed time step
+        // max frame time to avoid spiral of death (on slow devices)
+        float frameTime = Math.min(deltaTime, 0.25f);
+        accumulator += frameTime;
+        while (accumulator >= timeStep) {
+            world.step(timeStep, velocityIterations, positionIterations);
+            accumulator -= timeStep;
+        }
+    }
+}
