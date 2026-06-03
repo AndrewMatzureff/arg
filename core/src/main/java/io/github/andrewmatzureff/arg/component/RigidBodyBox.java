@@ -15,6 +15,8 @@ public class RigidBodyBox implements Component {
     private final float width;
     @Getter
     private final float height;
+    @Getter
+    private final boolean debugDraw = false;
 
     public RigidBodyBox(World world, float width, float height) {
 
@@ -25,6 +27,7 @@ public class RigidBodyBox implements Component {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(-WORLD_WIDTH / 2 + 1, 0);
         this.body = world.createBody(bodyDef);
+        body.setUserData("player");
 
         final var box = new PolygonShape();
         box.setAsBox(width / 2, height / 2);

@@ -31,6 +31,7 @@ public class GameplayMovementHandlerSystem extends IteratingSystem {
             .map(RigidBodyBox.MAPPER::get)
             .map(RigidBodyBox::getBody)
             .map(peek(body -> body.applyForceToCenter(moveDirection.scl(moveForce), true)))
+            .map(peek(body -> body.applyTorque(-moveDirection.x * 0.25f, true)))
             .map(Body::getWorldCenter)
             .ifPresent(transform::setPosition);
         transform.setRotation(MathUtils.radDeg * rigidBody.getAngle());

@@ -55,8 +55,8 @@ public class GameScreen implements Screen {
             .add(new Transform())
             .add(new AnimationController())
             .add(new SpriteRenderer())
-            .add(new RigidBodyBox(physicsManager.getWorld(), 1, 2))
-            .add(new DebugRigidBodyBox(physicsManager.getWorld(), 1000, 2));
+            .add(new RigidBodyBox(physicsManager.getWorld(), 1f, 1.75f)) // 1f, 2f
+            .add(new DebugRigidBodyBox(physicsManager.getWorld(), 1000, 0.125f));
 
         StateManager.MAPPER.get(player).setState(new MobIdleState(player));
         this.engine.addEntity(player);
