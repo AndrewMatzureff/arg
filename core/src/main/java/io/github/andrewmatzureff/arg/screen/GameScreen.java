@@ -44,6 +44,7 @@ public class GameScreen implements Screen {
         this.engine.addSystem(commandHandlerSystem);
         this.engine.addSystem(gameplayMovementHandlerSystem);
         this.engine.addSystem(animationSystem);
+        this.engine.addSystem(new CameraControlSystem(game.getCamera()));
         this.engine.addSystem(spriteRendererSystem);
 
         final Entity player = engine.createEntity()
@@ -56,7 +57,8 @@ public class GameScreen implements Screen {
             .add(new AnimationController())
             .add(new SpriteRenderer())
             .add(new RigidBodyBox(physicsManager.getWorld(), 1f, 1.75f)) // 1f, 2f
-            .add(new DebugRigidBodyBox(physicsManager.getWorld(), 1000, 0.125f));
+            .add(new DebugRigidBodyBox(physicsManager.getWorld(), 1000, 0.125f))
+            .add(new CameraController());
 
         StateManager.MAPPER.get(player).setState(new MobIdleState(player));
         this.engine.addEntity(player);
