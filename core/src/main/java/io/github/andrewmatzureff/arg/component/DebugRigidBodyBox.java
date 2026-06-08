@@ -26,7 +26,7 @@ public class DebugRigidBodyBox implements Component {
 
         final var bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0, -WORLD_HEIGHT / 2);
+        bodyDef.position.set(0, 0*-WORLD_HEIGHT / 2);
         this.body = world.createBody(bodyDef);
 
         final var chainShape = chainShape(width, height);//new ChainShape();

@@ -1,5 +1,6 @@
 package io.github.andrewmatzureff.arg.system;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -13,6 +14,8 @@ public class PhysicsManager {
 
     @Getter
     private final World world = new World(new Vector2(0, -10), true);
+    @Getter
+    private final Engine engine;
     private final Box2DDebugRenderer debugRenderer = new ConditionalBox2DDebugRenderer(Set.of(
         "player"));
     private final float timeStep = 1 / 60f;
@@ -21,8 +24,9 @@ public class PhysicsManager {
     private final Camera camera;
     private float accumulator;
 
-    public PhysicsManager(Viewport viewport) {
+    public PhysicsManager(Engine engine, Viewport viewport) {
         this.camera = viewport.getCamera();
+        this.engine = engine;
         Box2D.init();
     }
 

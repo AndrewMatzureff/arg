@@ -25,7 +25,7 @@ public class RigidBodyBox implements Component {
 
         final var bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(-WORLD_WIDTH / 2 + 1, 0);
+        bodyDef.position.set(-WORLD_WIDTH / 2 + 1, 100);
         this.body = world.createBody(bodyDef);
         body.setUserData("player");
 
