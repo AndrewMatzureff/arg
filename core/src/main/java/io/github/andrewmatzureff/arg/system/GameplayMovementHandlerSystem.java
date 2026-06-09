@@ -12,6 +12,7 @@ import io.github.andrewmatzureff.arg.component.Transform;
 
 import java.util.Optional;
 
+import static io.github.andrewmatzureff.arg.GDXGame.WORLD_WIDTH;
 import static io.github.andrewmatzureff.arg.util.Optionals.peek;
 
 public class GameplayMovementHandlerSystem extends IteratingSystem {
@@ -27,6 +28,9 @@ public class GameplayMovementHandlerSystem extends IteratingSystem {
         final var moveDirection = move.getDirection().scl(move.getSpeed());
         final var moveForce = move.getSpeed();
         final var rigidBody = RigidBodyBox.MAPPER.get(entity).getBody();
+        if (rigidBody.getPosition().y < 0) {
+            rigidBody.setTransform(100, 100, rigidBody.getAngle());
+        }
         Optional.of(entity)
             .map(RigidBodyBox.MAPPER::get)
             .map(RigidBodyBox::getBody)

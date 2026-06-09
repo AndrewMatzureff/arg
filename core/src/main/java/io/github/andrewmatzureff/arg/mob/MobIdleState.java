@@ -1,7 +1,9 @@
 package io.github.andrewmatzureff.arg.mob;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.physics.box2d.Body;
 import io.github.andrewmatzureff.arg.component.AnimationController;
+import io.github.andrewmatzureff.arg.component.RigidBodyBox;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.util.Optionals;
 
@@ -30,7 +32,12 @@ public record MobIdleState(Entity entity) implements MobState {
 
     @Override
     public void update() {
-
+        Optional.of(entity)
+            .map(RigidBodyBox.MAPPER::get)
+            .map(RigidBodyBox::getBody)
+            .map(Body::getLinearVelocity)
+            .filter(v -> v.y < -2f)
+            .ifPresent(v -> transition(MobFallState::new));
     }
 
     @Override

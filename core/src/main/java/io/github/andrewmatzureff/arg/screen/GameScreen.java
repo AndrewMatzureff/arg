@@ -3,9 +3,14 @@ package io.github.andrewmatzureff.arg.screen;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapGroupLayer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
@@ -14,13 +19,17 @@ import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.andrewmatzureff.arg.GDXGame;
 import io.github.andrewmatzureff.arg.component.*;
 import io.github.andrewmatzureff.arg.component.DebugRigidBodyBox;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.GameplayDeviceInputAdapter;
+import io.github.andrewmatzureff.arg.mob.MobFallState;
 import io.github.andrewmatzureff.arg.system.*;
 import io.github.andrewmatzureff.arg.mob.MobIdleState;
 import io.github.andrewmatzureff.arg.util.Box2DEntityInitializer;
@@ -30,6 +39,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static io.github.andrewmatzureff.arg.GDXGame.WORLD_HEIGHT;
+import static io.github.andrewmatzureff.arg.GDXGame.WORLD_WIDTH;
+import static io.github.andrewmatzureff.arg.component.AnimationController.WALK;
 import static java.util.stream.StreamSupport.stream;
 
 /** First screen of the application. Displayed after the application is created. */
@@ -119,11 +131,31 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         delta = Math.min(delta, 1f / 30);
-        game.getCamera().zoom = 1;//(float) Math.sin(System.nanoTime() / 1000000000d)+1f;
+        final var v = RigidBodyBox.MAPPER.get(engine.getEntitiesFor(Family.all(RigidBodyBox.class).get()).get(0)).getBody().getLinearVelocity().len2() / 100f;
+        game.getCamera().zoom = Math.clamp(game.getCamera().zoom + (v - game.getCamera().zoom)*0.0125f, 0.5f, 2);//(float) Math.sin(System.nanoTime() / 1000000000d)+1f;
+        game.getViewport().apply();
         mapManager.getRenderer().setView(game.getCamera());
         mapManager.getRenderer().render();
         engine.update(delta);
         physicsManager.tick(delta);
+
+        Optional.of(game)
+            .map(GDXGame::getBatch)
+            .ifPresent(b -> {
+                final var c = new OrthographicCamera();//game.getCamera();
+                c.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                final var vp = new ScreenViewport(c);
+                vp.update((int) c.viewportWidth, (int) c.viewportHeight, false);
+                vp.apply();
+                b.setProjectionMatrix(c.combined);
+                b.begin();
+                final var w = c.viewportWidth * 0.1f;
+                final var h = c.viewportHeight * 0.1f;
+                b.setColor(Color.GRAY);
+                b.draw(AnimationController.PIRATE_SHEET, 0, c.viewportHeight * 0.5f - h / 2, w, h, 64, 32, 32, 32, true, false);
+                b.draw(AnimationController.PIRATE_SHEET, c.viewportWidth - w, c.viewportHeight * 0.5f - h / 2, w, h, 64, 32, 32, 32, false, false);
+                b.end();
+            });
     }
 
     @Override

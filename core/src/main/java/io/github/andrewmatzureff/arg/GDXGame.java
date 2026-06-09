@@ -33,6 +33,10 @@ public class GDXGame extends Game {
     private OrthographicCamera camera;
     @Getter
     private Viewport viewport;
+    @Getter
+    private int width = 0;
+    @Getter
+    private int height = 0;
     private GLProfiler glProfiler;
     private FPSLogger fpsLogger;
     private InputMultiplexer inputMultiplexer;
@@ -59,6 +63,8 @@ public class GDXGame extends Game {
 
     @Override
     public void resize(int width, int height) {
+        this.width = width;
+        this.height = height;
         viewport.update(width, height, false);
 
         super.resize(width, height);

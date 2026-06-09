@@ -8,7 +8,9 @@ import io.github.andrewmatzureff.arg.component.StateManager;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.util.Optionals;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.badlogic.gdx.math.MathUtils.isZero;
 
@@ -48,8 +50,14 @@ public record MobWalkState(Entity entity) implements MobState {
         Optional.of(entity)
             .map(Move.MAPPER::get)
             .map(Move::getDirection)
-            .filter(v -> isZero(v.x, 0.1f))
-            .ifPresent(__ -> transition(MobIdleState::new));
+//            .filter(v -> isZero(v.x, 0.1f))
+//            .ifPresent(__ -> transition(MobIdleState::new));
+            .<Function<Entity, MobState>>map(v -> {
+                if (v.y < 0) return MobFallState::new;
+                if (isZero(v.x, 0.1f)) return MobIdleState::new;
+                return null;
+            })
+            .ifPresent(this::transition);
     }
 
     @Override

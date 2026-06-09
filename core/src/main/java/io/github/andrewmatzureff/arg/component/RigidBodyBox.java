@@ -25,7 +25,7 @@ public class RigidBodyBox implements Component {
 
         final var bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(-WORLD_WIDTH / 2 + 1, 100);
+        bodyDef.position.set(75, 75);
         this.body = world.createBody(bodyDef);
         body.setUserData("player");
 
@@ -43,6 +43,7 @@ public class RigidBodyBox implements Component {
         final var fixture = body.createFixture(fixtureDef);
 
         box.dispose();
+        body.setLinearVelocity(0, -10);
     }
 
     // static \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

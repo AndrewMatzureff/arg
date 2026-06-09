@@ -15,11 +15,11 @@ import java.util.stream.IntStream;
 
 public class AnimationController implements Component {
 
-    private final Texture pirateSheet = new Texture(Gdx.files.internal("pirate.png"));
+    public static final Texture PIRATE_SHEET = new Texture(Gdx.files.internal("pirate.png"));
     private final TextureRegion[][] frames = trim(TextureRegion.split(
-        pirateSheet,
-        pirateSheet.getWidth() / Arrays.stream(FRAME_COLS).max().orElse(0),
-        pirateSheet.getHeight() / FRAME_ROWS));
+        PIRATE_SHEET,
+        PIRATE_SHEET.getWidth() / Arrays.stream(FRAME_COLS).max().orElse(0),
+        PIRATE_SHEET.getHeight() / FRAME_ROWS));
     @Getter
     private final List<Animation<TextureRegion>> animations = Arrays.stream(frames)
         .map(row -> new Animation<>(1f / 10, row))
