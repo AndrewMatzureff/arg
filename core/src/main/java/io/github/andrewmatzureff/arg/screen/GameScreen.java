@@ -42,6 +42,7 @@ import java.util.stream.Stream;
 import static io.github.andrewmatzureff.arg.GDXGame.WORLD_HEIGHT;
 import static io.github.andrewmatzureff.arg.GDXGame.WORLD_WIDTH;
 import static io.github.andrewmatzureff.arg.component.AnimationController.WALK;
+import static io.github.andrewmatzureff.arg.component.KeyboardBuffer.*;
 import static java.util.stream.StreamSupport.stream;
 
 /** First screen of the application. Displayed after the application is created. */
@@ -151,9 +152,12 @@ public class GameScreen implements Screen {
                 b.begin();
                 final var w = c.viewportWidth * 0.1f;
                 final var h = c.viewportHeight * 0.1f;
-                b.setColor(Color.GRAY);
+                b.setColor(DEMO_MOVE_LEFT ? Color.WHITE : Color.GRAY);
                 b.draw(AnimationController.PIRATE_SHEET, 0, c.viewportHeight * 0.5f - h / 2, w, h, 64, 32, 32, 32, true, false);
+                b.setColor(DEMO_MOVE_RIGHT ? Color.WHITE : Color.GRAY);
                 b.draw(AnimationController.PIRATE_SHEET, c.viewportWidth - w, c.viewportHeight * 0.5f - h / 2, w, h, 64, 32, 32, 32, false, false);
+                b.setColor(DEMO_JUMP ? Color.WHITE : Color.GRAY);
+                b.draw(AnimationController.PIRATE_SHEET, c.viewportWidth / 2 - w / 2, c.viewportHeight * 0.17f - h / 2, w, h, 64, 32 * 7, 32, 32, false, false);
                 b.end();
             });
     }
