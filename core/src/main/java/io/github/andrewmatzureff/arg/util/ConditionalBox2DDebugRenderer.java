@@ -3,23 +3,20 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.function.Predicate;
 
-import static java.util.function.Predicate.not;
+import static io.github.andrewmatzureff.arg.util.Optionals.some;
 
 @RequiredArgsConstructor
 public class ConditionalBox2DDebugRenderer extends Box2DDebugRenderer {
 
-    private final Set<String> omit;
+    private final Predicate<Object> omit;
 
     @Override
     protected void renderBody(Body body) {
-        Optional.of(body)
+        some(body)
             .map(Body::getUserData)
-            .map(Object::toString)
-            .filter(omit::contains)
+            .filter(omit)
             .ifPresentOrElse(__ -> {}, () -> super.renderBody(body));
     }
-
 }

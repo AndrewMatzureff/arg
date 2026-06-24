@@ -8,16 +8,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.andrewmatzureff.arg.util.ConditionalBox2DDebugRenderer;
 import lombok.Getter;
 
-import java.util.Set;
-
 public class PhysicsManager {
 
     @Getter
     private final World world = new World(new Vector2(0, -10), true);
     @Getter
     private final Engine engine;
-    private final Box2DDebugRenderer debugRenderer = new ConditionalBox2DDebugRenderer(Set.of(
-        "player"));
+    private final Box2DDebugRenderer debugRenderer = new ConditionalBox2DDebugRenderer(obj -> false);
     private final float timeStep = 1 / 60f;
     private final int velocityIterations = 6;
     private final int positionIterations = 2;

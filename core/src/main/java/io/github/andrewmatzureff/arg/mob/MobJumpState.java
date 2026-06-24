@@ -2,7 +2,7 @@ package io.github.andrewmatzureff.arg.mob;
 
 import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.component.AnimationController;
-import io.github.andrewmatzureff.arg.component.RigidBodyBox;
+import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.Command;
@@ -36,7 +36,7 @@ public record MobJumpState(Entity entity) implements MobState {
     public void update() {
         final var jump = Jump.MAPPER.get(entity);
         final var move = Move.MAPPER.get(entity);
-        final var rigidBodyBox = RigidBodyBox.MAPPER.get(entity);
+        final var rigidBodyBox = RigidBody.MAPPER.get(entity);
         final var animationController = AnimationController.MAPPER.get(entity);
         if (jump.isTriggered()) move.accumulate(0, 75);
         if (animationController.isFinished() && rigidBodyBox.getBody().getLinearVelocity().y <= 0) transition(MobFallState::new);

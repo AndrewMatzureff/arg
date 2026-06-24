@@ -2,9 +2,8 @@ package io.github.andrewmatzureff.arg.mob;
 
 import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.component.AnimationController;
-import io.github.andrewmatzureff.arg.component.RigidBodyBox;
+import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Move;
-import io.github.andrewmatzureff.arg.component.StateManager;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.util.Optionals;
 
@@ -25,7 +24,7 @@ public record MobWalkState(Entity entity) implements MobState {
     @Override
     public void handle(Command command) {
         final var move = Move.MAPPER.get(entity);
-        final var rigidBodyBox = RigidBodyBox.MAPPER.get(entity);
+        final var rigidBodyBox = RigidBody.MAPPER.get(entity);
         final var body = rigidBodyBox.getBody();
         switch (command) {
             case MOVE_LEFT -> {

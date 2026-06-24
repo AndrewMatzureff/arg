@@ -6,7 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import io.github.andrewmatzureff.arg.component.RigidBodyBox;
+import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.component.Transform;
 
@@ -26,10 +26,10 @@ public class GameplayMovementHandlerSystem extends IteratingSystem {
         final var transform = Transform.MAPPER.get(entity);
         final var moveDirection = move.getDirection().scl(move.getSpeed());
         final var moveForce = move.getSpeed();
-        final var rigidBody = RigidBodyBox.MAPPER.get(entity).getBody();
+        final var rigidBody = RigidBody.MAPPER.get(entity).getBody();
         Optional.of(entity)
-            .map(RigidBodyBox.MAPPER::get)
-            .map(RigidBodyBox::getBody)
+            .map(RigidBody.MAPPER::get)
+            .map(RigidBody::getBody)
             .map(peek(body -> body.applyForceToCenter(moveDirection.scl(moveForce), true)))
             .map(peek(body -> body.applyTorque(-moveDirection.x * 0.25f, true)))
             .map(Body::getWorldCenter)

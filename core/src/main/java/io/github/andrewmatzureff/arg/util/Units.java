@@ -11,4 +11,7 @@ public final class Units {
 
     /// Multiply this value by any length in pixels to obtain the equivalent length in meters.
     public static final float PIXELS_TO_METERS = 1 / METERS_TO_PIXELS;
+
+    /// Not a unit, but used frequently in conversions.
+    public static final float TWO_PI = (float) (2f * Math.PI);
 }
