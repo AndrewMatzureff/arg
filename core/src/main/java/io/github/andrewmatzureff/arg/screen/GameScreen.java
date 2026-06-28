@@ -37,11 +37,17 @@ public class GameScreen implements Screen {
         this.physicsManager = new PhysicsManager(engine, game.getViewport());
 
         this.engine.addSystem(gameplayInputCommandAdapterSystem);
-        this.engine.addSystem(commandHandlerSystem);
+//        this.engine.addSystem(commandHandlerSystem);
         this.engine.addSystem(gameplayMovementHandlerSystem);
         this.engine.addSystem(animationSystem);
         this.engine.addSystem(new CameraControlSystem(game.getCamera()));
         this.engine.addSystem(spriteRendererSystem);
+        //
+        this.engine.addSystem(new MobFallStateSystem());
+        this.engine.addSystem(new MobLandStateSystem());
+        this.engine.addSystem(new MobIdleStateSystem());
+        this.engine.addSystem(new MobWalkStateSystem());
+        this.engine.addSystem(new MobJumpStateSystem());
 
         mapManager = new MapManager(engine, physicsManager);
         mapManager.load("test.tmx");
@@ -59,6 +65,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+//        System.out.println();
         delta = Math.min(delta, 1f / 30);
         game.getCamera().zoom = 1;//(float) Math.sin(System.nanoTime() / 1000000000d)+1f;
         mapManager.getRenderer().setView(game.getCamera());

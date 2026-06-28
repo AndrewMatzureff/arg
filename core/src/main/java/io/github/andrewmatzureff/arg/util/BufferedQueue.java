@@ -40,4 +40,6 @@ public class BufferedQueue<T> implements Streamable<T> {
     }
 
     public boolean hasPending() {return peek().isPresent();}
+
+    public boolean hasQueued() {return !queued.isEmpty();}
 }

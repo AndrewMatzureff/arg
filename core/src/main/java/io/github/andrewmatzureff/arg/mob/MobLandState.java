@@ -1,38 +1,7 @@
 package io.github.andrewmatzureff.arg.mob;
 
-import com.badlogic.ashley.core.Entity;
-import io.github.andrewmatzureff.arg.component.AnimationController;
-import io.github.andrewmatzureff.arg.component.mob.Move;
-import io.github.andrewmatzureff.arg.input.Command;
-import io.github.andrewmatzureff.arg.util.Optionals;
+import com.badlogic.ashley.core.ComponentMapper;
 
-import java.util.Optional;
-
-public record MobLandState(Entity entity) implements MobState {
-
-    @Override
-    public void enter() {
-        Optional.of(entity)
-            .map(AnimationController.MAPPER::get)
-            .map(Optionals.peek(ac -> ac.setAnimationState(AnimationController.LAND)))
-            .ifPresent(ac -> ac.setLooping(false));
-    }
-
-    @Override
-    public void handle(Command command) {
-        switch (command) {
-            case MOVE_LEFT -> Move.MAPPER.get(entity).accumulate(-0.5f, 0);
-            case MOVE_RIGHT -> Move.MAPPER.get(entity).accumulate(0.5f, 0);
-        }
-    }
-
-    @Override
-    public void update() {
-        final var animationController = AnimationController.MAPPER.get(entity);
-        if (animationController.isFinished()) transition(MobIdleState::new);
-    }
-
-    @Override
-    public void exit() {
-    }
+public class MobLandState extends MobState {
+    public static final ComponentMapper<MobLandState> MAPPER = ComponentMapper.getFor(MobLandState.class);
 }

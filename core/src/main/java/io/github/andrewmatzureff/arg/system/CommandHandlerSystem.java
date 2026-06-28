@@ -15,11 +15,12 @@ public class CommandHandlerSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        final var controller = GameplayCommandBuffer.MAPPER.get(entity);
-        final var stateManager = StateManager.MAPPER.get(entity);
-        try (final var stream = controller.stream()
-            .onClose(() -> stateManager.getState().update())) {
-            stream.forEach(command -> stateManager.getState().handle(command));
-        }
+//        final var controller = GameplayCommandBuffer.MAPPER.get(entity);
+//        final var stateManager = StateManager.MAPPER.get(entity);
+//        try (final var stream = controller.stream()
+//            .onClose(() -> stateManager.getState().update())) {
+//            stream.forEach(command -> stateManager.getState().handle(command));
+//            // TODO: move state handling logic from within states into state handling systems
+//        }
     }
 }

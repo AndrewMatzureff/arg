@@ -20,6 +20,8 @@ public abstract class AbstractBufferingComponent<T> implements Streamable<T>, Co
             return queue.flush().stream();
         }
 
+        if (!queue.hasQueued()) return Stream.empty();
+
         throw new IllegalStateException("Tried to flush incremental queue data %s than once per frame! Streamed during %d frames despite LibGDX reporting %d have elapsed. '%s::%s' must be called exactly once per frame (1 Frame = 1 Flush)."
             .formatted(
                 frame > Gdx.graphics.getFrameId() ? "more" : "less",
