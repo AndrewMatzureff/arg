@@ -1,6 +1,7 @@
-package io.github.andrewmatzureff.arg.animations;
+package io.github.andrewmatzureff.arg.animations.reels;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import io.github.andrewmatzureff.arg.animations.Reels;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

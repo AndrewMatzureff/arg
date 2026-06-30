@@ -21,7 +21,7 @@ public final class Reels {
 
     private static final Map<Clip, Array<TextureRegion>> animations = new HashMap<>();
 
-    static Animation<TextureRegion> animation(Clip clip) {
+    private static Animation<TextureRegion> animation(Clip clip) {
         validate(clip);
         return new Animation<>(1f / 10, animations.get(clip), clip.getPlayMode());
     }
@@ -37,25 +37,25 @@ public final class Reels {
         animations.clear();
     }
 
-    private static void validate(Clip animation) {
-        if (animation != null && animations.containsKey(animation)) return;
+    private static void validate(Clip clip) {
+        if (clip != null && animations.containsKey(clip)) return;
         invalidate();
-        if (animation == null) return;
+        if (clip == null) return;
 
-        final var texture = new Texture(Gdx.files.internal(animation.spriteSheet()));
-        final var frameRows = animation.reel().length;
-        final var frames = TextureRegion.split(texture,
-            texture.getWidth() / Arrays.stream(animation.reel())
+        final var texture = new Texture(Gdx.files.internal(clip.spriteSheet()));
+        final var reel = clip.reel();
+        final var clips = TextureRegion.split(texture,
+            texture.getWidth() / Arrays.stream(reel)
                 .map(Clip::getFrameCount)
                 .max(Comparator.naturalOrder())
                 .orElse(0),
-            texture.getHeight() / frameRows);
+            texture.getHeight() / reel.length);
 
-        IntStream.range(0, frames.length)
-            .peek(i -> frames[i] = Arrays.copyOfRange(frames[i], 0,
-                animation.reel()[i]
-                    .getFrameCount()))
-            .forEach(i -> animations.put(animation.reel()[i], new Array<>(frames[i])));
+        IntStream.range(0, clips.length)
+            // TODO: dispose of empty texture frames leftover from region split
+            .peek(i -> clips[i] = Arrays.copyOfRange(clips[i], 0, reel[i]
+                .getFrameCount()))
+            .forEach(i -> animations.put(reel[i], new Array<>(clips[i])));
     }
 
     public interface Clip {
