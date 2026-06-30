@@ -2,13 +2,13 @@ package io.github.andrewmatzureff.arg.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import io.github.andrewmatzureff.arg.animations.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
 import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.mob.*;
-import io.github.andrewmatzureff.arg.util.Optionals;
 
 import java.util.Optional;
 
@@ -52,26 +52,17 @@ public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkS
     public void enter(Entity entity, float deltaTime) {
         Optional.of(entity)
             .map(AnimationController.MAPPER::get)
-            .map(peek(controller -> controller.setAnimationState(AnimationController.WALK)))
+            .map(peek(controller -> controller.setAnimation(Player.Clip.WALK.animation())))
             .ifPresent(controller -> controller.setLooping(true));
     }
 
     @Override
     public Optional<MobState> update(Entity entity, float deltaTime) {
-//        final var move = Move.MAPPER.get(entity);
-//        if (isZero(move.getDirection().x)) return some(new MobIdleState());
-//        return none();
-
         final var jump = Jump.MAPPER.get(entity);
         if (jump.isJumping()) return some(new MobJumpState());
         final var move = Move.MAPPER.get(entity);
         if (isZero(move.getDirection().x)) return some(new MobIdleState());
         return none();
-//        Optional.of(entity)
-//            .map(Move.MAPPER::get)
-//            .map(Move::getDirection)
-//            .filter(v -> isZero(v.x, 0.1f))
-//            .ifPresent(__ -> transition(MobIdleState::new));
     }
 
     @Override

@@ -2,19 +2,18 @@ package io.github.andrewmatzureff.arg.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import io.github.andrewmatzureff.arg.animations.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
 import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.mob.*;
-import io.github.andrewmatzureff.arg.util.Optionals;
 
 import java.util.Optional;
 
 import static com.badlogic.gdx.math.MathUtils.isZero;
-import static io.github.andrewmatzureff.arg.util.Optionals.none;
-import static io.github.andrewmatzureff.arg.util.Optionals.some;
+import static io.github.andrewmatzureff.arg.util.Optionals.*;
 
 public class MobIdleStateSystem extends AbstractMobStateIteratingSystem<MobIdleState> {
 
@@ -24,13 +23,6 @@ public class MobIdleStateSystem extends AbstractMobStateIteratingSystem<MobIdleS
 
     @Override
     public void handle(Command command, Entity entity, float deltaTime) {
-//        if (command == Command.MOVE_LEFT || command == Command.MOVE_RIGHT) {
-//            transition(MobWalkState::new)
-//                .handle(command);
-//        } else if (command == Command.JUMP) {
-//            transition(MobJumpState::new)
-//                .handle(command);
-//        }
         final var move = Move.MAPPER.get(entity);
         final var rigidBodyBox = RigidBody.MAPPER.get(entity);
         final var body = rigidBodyBox.getBody();
@@ -60,7 +52,7 @@ public class MobIdleStateSystem extends AbstractMobStateIteratingSystem<MobIdleS
     public void enter(Entity entity, float deltaTime) {
         Optional.of(entity)
             .map(AnimationController.MAPPER::get)
-            .map(Optionals.peek(controller -> controller.setAnimationState(AnimationController.IDLE_WALK)))
+            .map(peek(ac -> ac.setAnimation(Player.Clip.IDLE.animation())))
             .ifPresent(controller -> controller.setLooping(true));
     }
 

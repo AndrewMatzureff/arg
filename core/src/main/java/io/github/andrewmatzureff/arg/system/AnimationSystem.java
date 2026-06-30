@@ -15,7 +15,6 @@ public class AnimationSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         final var animationController = AnimationController.MAPPER.get(entity);
-        final var state = animationController.getAnimationState();
         final var frame = animationController.getFrame();
         final var spriteRenderer = SpriteRenderer.MAPPER.get(entity);
         spriteRenderer.setTextureRegion(frame);

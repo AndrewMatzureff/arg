@@ -11,8 +11,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import io.github.andrewmatzureff.arg.component.*;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.Move;
-import io.github.andrewmatzureff.arg.mob.MobFallState;
-import io.github.andrewmatzureff.arg.mob.MobIdleState;
+import io.github.andrewmatzureff.arg.mob.*;
 import io.github.andrewmatzureff.arg.system.PhysicsManager;
 import lombok.Getter;
 

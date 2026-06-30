@@ -2,6 +2,7 @@ package io.github.andrewmatzureff.arg.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import io.github.andrewmatzureff.arg.animations.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
 import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
@@ -12,7 +13,6 @@ import io.github.andrewmatzureff.arg.util.Optionals;
 
 import java.util.Optional;
 
-import static com.badlogic.gdx.math.MathUtils.isZero;
 import static io.github.andrewmatzureff.arg.util.Optionals.none;
 import static io.github.andrewmatzureff.arg.util.Optionals.some;
 
@@ -39,12 +39,8 @@ public class MobJumpStateSystem extends AbstractMobStateIteratingSystem<MobJumpS
     public void enter(Entity entity, float deltaTime) {
         Optional.of(entity)
             .map(AnimationController.MAPPER::get)
-            .map(Optionals.peek(ac -> ac.setAnimationState(AnimationController.JUMP)))
+            .map(Optionals.peek(ac -> ac.setAnimation(Player.Clip.JUMP.animation())))
             .ifPresent(ac -> ac.setLooping(false));
-
-//        Optional.of(entity)
-//            .map(Jump.MAPPER::get)
-//            .ifPresent(jump -> jump.setTriggered(true));
     }
 
     @Override
@@ -55,7 +51,6 @@ public class MobJumpStateSystem extends AbstractMobStateIteratingSystem<MobJumpS
         final var animationController = AnimationController.MAPPER.get(entity);
         if (jump.isComplete()) move.up(75);
         if (animationController.isFinished() && rigidBodyBox.getBody().getLinearVelocity().y <= 0) return  some(new MobFallState());
-//        jump.setTriggered(false);
         return none();
     }
 

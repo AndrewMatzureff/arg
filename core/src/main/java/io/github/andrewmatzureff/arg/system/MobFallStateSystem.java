@@ -2,6 +2,7 @@ package io.github.andrewmatzureff.arg.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import io.github.andrewmatzureff.arg.animations.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
 import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Move;
@@ -37,8 +38,7 @@ public class MobFallStateSystem extends AbstractMobStateIteratingSystem<MobFallS
     protected void enter(Entity entity, float deltaTime) {
         Optional.of(entity)
             .map(AnimationController.MAPPER::get)
-            .map(peek(ac -> ac.setAnimationState(AnimationController.FALL)))
-            .ifPresent(ac -> ac.setLooping(true));
+            .ifPresent(ac -> ac.setAnimation(Player.Clip.FALL.animation()));
     }
 
     @Override
