@@ -1,0 +1,63 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package "Class Hierarchy" {
+    interface Component
+    class MobTraits implements Component {
+        - <<final>> Set<Trait> traits;
+        + <<static>> <<final>> ComponentMapper<MobTraits> MAPPER;
+        + boolean have(Trait trait);
+        + boolean lack(Trait trait);
+        + boolean add(Trait trait);
+        + void clear();
+    }
+    interface Trait {
+        + Set<Trait> ancestors();
+        + Set<Trait> descendants();
+        + Set<Trait> family();
+    }
+    MobTraits +-- Trait
+    enum Motion implements Trait {
+        MOVING
+        MOVING_X
+        MOVING_X_POSITIVE
+        MOVING_X_NEGATIVE
+        MOVING_Y
+        MOVING_Y_POSITIVE
+        MOVING_Y_NEGATIVE
+        MOVING_Z
+        MOVING_Z_POSITIVE
+        MOVING_Z_NEGATIVE
+        MOVING_HORIZONTALLY
+        MOVING_LEFTWARD
+        MOVING_RIGHTWARD
+        MOVING_VERTICALLY
+        MOVING_UPWARD
+        MOVING_DOWNWARD
+        MOVING_ALONG_AXIS
+        MOVING_FORWARD
+        MOVING_BACKWARD
+    }
+}
+package "Trait Hierarchy" {
+    enum MOVING<<Motion>>
+        enum MOVING_X<<Motion>> extends MOVING
+            enum MOVING_X_POSITIVE<<Motion>> extends MOVING_X
+            enum MOVING_X_NEGATIVE<<Motion>> extends MOVING_X
+        enum MOVING_Y<<Motion>> extends MOVING
+            enum MOVING_Y_POSITIVE<<Motion>> extends MOVING_Y
+            enum MOVING_Y_NEGATIVE<<Motion>> extends MOVING_Y
+        enum MOVING_Z<<Motion>> extends MOVING
+            enum MOVING_Z_POSITIVE<<Motion>> extends MOVING_Z
+            enum MOVING_Z_NEGATIVE<<Motion>> extends MOVING_Z
+        enum MOVING_HORIZONTALLY<<Motion>> extends MOVING
+            enum MOVING_LEFTWARD<<Motion>> extends MOVING_HORIZONTALLY
+            enum MOVING_RIGHTWARD<<Motion>> extends MOVING_HORIZONTALLY
+        enum MOVING_VERTICALLY<<Motion>> extends MOVING
+            enum MOVING_UPWARD<<Motion>> extends MOVING_VERTICALLY
+            enum MOVING_DOWNWARD<<Motion>> extends MOVING_VERTICALLY
+        enum MOVING_ALONG_AXIS<<Motion>> extends MOVING
+            enum MOVING_FORWARD<<Motion>> extends MOVING_ALONG_AXIS
+            enum MOVING_BACKWARD<<Motion>> extends MOVING_ALONG_AXIS
+}
+@enduml

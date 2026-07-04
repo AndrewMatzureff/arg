@@ -4,7 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.animations.reels.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
-import io.github.andrewmatzureff.arg.component.RigidBody;
+import io.github.andrewmatzureff.arg.component.mob.MobTraits;
+import io.github.andrewmatzureff.arg.component.mob.Motion;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.mob.MobFallState;
@@ -18,11 +19,12 @@ import static io.github.andrewmatzureff.arg.util.Optionals.*;
 public class MobFallStateSystem extends AbstractMobStateIteratingSystem<MobFallState> {
 
     public MobFallStateSystem() {
-        super(MobFallState.class);
+        super(MobFallState.class, MobTraits.class);
     }
 
     @Override
     protected void handle(Command command, Entity entity, float deltaTime) {
+
         switch (command) {
             case MOVE_LEFT -> Move.MAPPER.get(entity).left(0.5f);
             case MOVE_RIGHT -> Move.MAPPER.get(entity).right(0.5f);
@@ -43,8 +45,8 @@ public class MobFallStateSystem extends AbstractMobStateIteratingSystem<MobFallS
 
     @Override
     protected Optional<MobState> update(Entity entity, float deltaTime) {
-        final var rigidBodyBox = RigidBody.MAPPER.get(entity);
-        if (rigidBodyBox.getBody().getLinearVelocity().y >= 0) return some(new MobLandState());
+        final var traits = MobTraits.MAPPER.get(entity);
+        if (traits.lack(Motion.MOVING_Y)) return some(new MobLandState());
         return none();
     }
 

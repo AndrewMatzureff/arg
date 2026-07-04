@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import io.github.andrewmatzureff.arg.component.*;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
+import io.github.andrewmatzureff.arg.component.mob.MobTraits;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.mob.*;
 import io.github.andrewmatzureff.arg.system.PhysicsManager;
@@ -119,7 +120,8 @@ public class MapManager {
                     .add(new SpriteRenderer())
                     .add(new RigidBody(physicsManager.getWorld(), BodyDef.BodyType.DynamicBody, position, defs))//1f, 1.75f)) // 1f, 2f
                     .add(new CameraController())
-                    .add(new MobFallState());
+                    .add(new MobFallState())
+                    .add(new MobTraits());
                 this.engine.addEntity(player);
             }
             case Prop -> {}
