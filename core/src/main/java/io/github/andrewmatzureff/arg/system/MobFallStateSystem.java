@@ -46,7 +46,7 @@ public class MobFallStateSystem extends AbstractMobStateIteratingSystem<MobFallS
     @Override
     protected Optional<MobState> update(Entity entity, float deltaTime) {
         final var traits = MobTraits.MAPPER.get(entity);
-        if (traits.lack(Motion.MOVING_Y)) return some(new MobLandState());
+        if (traits.have(Motion.MOVING_Y_POSITIVE) || traits.lack(Motion.MOVING)) return some(new MobLandState());
         return none();
     }
 

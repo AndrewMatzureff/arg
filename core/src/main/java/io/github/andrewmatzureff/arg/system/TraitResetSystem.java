@@ -5,9 +5,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import io.github.andrewmatzureff.arg.component.mob.MobTraits;
 
-public class TraitSystem extends IteratingSystem {
+public class TraitResetSystem extends IteratingSystem {
 
-    public TraitSystem() {
+    public TraitResetSystem() {
         super(Family.all(MobTraits.class).get());
     }
 

@@ -18,7 +18,6 @@ public class GameScreen implements Screen {
     private final GDXGame game;
     private final GameplayDeviceInputAdapter gameplayDeviceInputAdapter;
     private final GameplayInputCommandAdapterSystem gameplayInputCommandAdapterSystem;
-    private final CommandHandlerSystem commandHandlerSystem;
     private final GameplayMovementHandlerSystem gameplayMovementHandlerSystem;
     private final AnimationSystem animationSystem;
     private final SpriteRendererSystem spriteRendererSystem;
@@ -30,7 +29,6 @@ public class GameScreen implements Screen {
         this.engine = new Engine();
         this.gameplayDeviceInputAdapter = new GameplayDeviceInputAdapter(engine);
         this.gameplayInputCommandAdapterSystem = new GameplayInputCommandAdapterSystem();
-        this.commandHandlerSystem = new CommandHandlerSystem();
         this.gameplayMovementHandlerSystem = new GameplayMovementHandlerSystem();
         this.animationSystem = new AnimationSystem();
         this.spriteRendererSystem = new SpriteRendererSystem(game.getBatch());
@@ -38,7 +36,6 @@ public class GameScreen implements Screen {
 
         this.engine.addSystem(gameplayInputCommandAdapterSystem);
 //        this.engine.addSystem(commandHandlerSystem);
-        this.engine.addSystem(gameplayMovementHandlerSystem);
         // update mob states
         this.engine.addSystem(new MobFallStateSystem());
         this.engine.addSystem(new MobLandStateSystem());
@@ -46,13 +43,14 @@ public class GameScreen implements Screen {
         this.engine.addSystem(new MobWalkStateSystem());
         this.engine.addSystem(new MobJumpStateSystem());
         // clear traits
-        this.engine.addSystem(new TraitSystem());
+        this.engine.addSystem(new TraitResetSystem());
         // update logic state
         this.engine.addSystem(animationSystem);
         this.engine.addSystem(new CameraControlSystem(game.getCamera()));
         this.engine.addSystem(spriteRendererSystem);
         // add traits
-        this.engine.addSystem(new RigidBodyTraitSystem());
+        this.engine.addSystem(new JumpSystem());
+        this.engine.addSystem(new PhysicsSystem());
 
         mapManager = new MapManager(engine, physicsManager);
         mapManager.load("test.tmx");

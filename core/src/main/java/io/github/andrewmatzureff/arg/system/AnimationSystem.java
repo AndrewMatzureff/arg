@@ -5,11 +5,16 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import io.github.andrewmatzureff.arg.component.AnimationController;
 import io.github.andrewmatzureff.arg.component.SpriteRenderer;
+import io.github.andrewmatzureff.arg.component.mob.MobTraits;
+import io.github.andrewmatzureff.arg.component.mob.Timing;
+
+import static io.github.andrewmatzureff.arg.util.Optionals.remap;
+import static io.github.andrewmatzureff.arg.util.Optionals.some;
 
 public class AnimationSystem extends IteratingSystem {
 
     public AnimationSystem() {
-        super(Family.all(AnimationController.class).get());
+        super(Family.all(AnimationController.class, MobTraits.class).get());
     }
 
     @Override
@@ -18,6 +23,10 @@ public class AnimationSystem extends IteratingSystem {
         final var frame = animationController.getFrame();
         final var spriteRenderer = SpriteRenderer.MAPPER.get(entity);
         spriteRenderer.setTextureRegion(frame);
-        animationController.tick(deltaTime);
+        some(deltaTime)
+            .map(remap(animationController, AnimationController::tick))
+            .filter(AnimationController::isFinished)
+            .map(remap(Timing.ANIMATION_FINISHED))
+            .ifPresent(MobTraits.MAPPER.get(entity)::add);
     }
 }

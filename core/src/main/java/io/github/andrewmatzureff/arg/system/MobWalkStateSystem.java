@@ -6,6 +6,8 @@ import io.github.andrewmatzureff.arg.animations.reels.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
 import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
+import io.github.andrewmatzureff.arg.component.mob.Maneuver;
+import io.github.andrewmatzureff.arg.component.mob.MobTraits;
 import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.mob.*;
@@ -58,8 +60,8 @@ public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkS
 
     @Override
     public Optional<MobState> update(Entity entity, float deltaTime) {
-        final var jump = Jump.MAPPER.get(entity);
-        if (jump.isJumping()) return some(new MobJumpState());
+        final var traits = MobTraits.MAPPER.get(entity);
+        if (traits.have(Maneuver.JUMPING)) return some(new MobJumpState());
         final var move = Move.MAPPER.get(entity);
         if (isZero(move.getDirection().x)) return some(new MobIdleState());
         return none();
