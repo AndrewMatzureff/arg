@@ -2,12 +2,9 @@ package io.github.andrewmatzureff.arg.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
-import io.github.andrewmatzureff.arg.mob.MobState;
+import io.github.andrewmatzureff.arg.state.MobState;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class StateManager implements Component {
 

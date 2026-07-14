@@ -12,7 +12,7 @@ import io.github.andrewmatzureff.arg.component.*;
 import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.MobTraits;
 import io.github.andrewmatzureff.arg.component.mob.Move;
-import io.github.andrewmatzureff.arg.mob.*;
+import io.github.andrewmatzureff.arg.state.*;
 import io.github.andrewmatzureff.arg.system.PhysicsManager;
 import lombok.Getter;
 

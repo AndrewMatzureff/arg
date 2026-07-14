@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.component.RigidBody;
-import io.github.andrewmatzureff.arg.mob.MobState;
+import io.github.andrewmatzureff.arg.state.MobState;
 import io.github.andrewmatzureff.arg.system.AbstractMobStateIteratingSystem;
 
 import java.util.HashSet;

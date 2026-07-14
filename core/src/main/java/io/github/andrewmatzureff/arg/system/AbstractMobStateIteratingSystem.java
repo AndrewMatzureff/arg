@@ -7,7 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import io.github.andrewmatzureff.arg.component.GameplayCommandBuffer;
 import io.github.andrewmatzureff.arg.input.Command;
-import io.github.andrewmatzureff.arg.mob.MobState;
+import io.github.andrewmatzureff.arg.state.MobState;
 
 import java.util.Arrays;
 import java.util.Optional;

@@ -18,7 +18,6 @@ public class GameScreen implements Screen {
     private final GDXGame game;
     private final GameplayDeviceInputAdapter gameplayDeviceInputAdapter;
     private final GameplayInputCommandAdapterSystem gameplayInputCommandAdapterSystem;
-    private final GameplayMovementHandlerSystem gameplayMovementHandlerSystem;
     private final AnimationSystem animationSystem;
     private final SpriteRendererSystem spriteRendererSystem;
     private final PhysicsManager physicsManager;
@@ -29,13 +28,11 @@ public class GameScreen implements Screen {
         this.engine = new Engine();
         this.gameplayDeviceInputAdapter = new GameplayDeviceInputAdapter(engine);
         this.gameplayInputCommandAdapterSystem = new GameplayInputCommandAdapterSystem();
-        this.gameplayMovementHandlerSystem = new GameplayMovementHandlerSystem();
         this.animationSystem = new AnimationSystem();
         this.spriteRendererSystem = new SpriteRendererSystem(game.getBatch());
         this.physicsManager = new PhysicsManager(engine, game.getViewport());
 
         this.engine.addSystem(gameplayInputCommandAdapterSystem);
-//        this.engine.addSystem(commandHandlerSystem);
         // update mob states
         this.engine.addSystem(new MobFallStateSystem());
         this.engine.addSystem(new MobLandStateSystem());
@@ -44,13 +41,11 @@ public class GameScreen implements Screen {
         this.engine.addSystem(new MobJumpStateSystem());
         // clear traits
         this.engine.addSystem(new TraitResetSystem());
-        // update logic state
+        // update logic state & add traits
         this.engine.addSystem(animationSystem);
+        this.engine.addSystem(new PhysicsControllerSystem());
         this.engine.addSystem(new CameraControlSystem(game.getCamera()));
         this.engine.addSystem(spriteRendererSystem);
-        // add traits
-        this.engine.addSystem(new JumpSystem());
-        this.engine.addSystem(new PhysicsSystem());
 
         mapManager = new MapManager(engine, physicsManager);
         mapManager.load("test.tmx");

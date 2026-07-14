@@ -1,4 +1,4 @@
-package io.github.andrewmatzureff.arg.mob;
+package io.github.andrewmatzureff.arg.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 

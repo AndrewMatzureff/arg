@@ -1,4 +1,4 @@
-package io.github.andrewmatzureff.arg.animations;
+package io.github.andrewmatzureff.arg.animation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

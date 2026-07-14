@@ -1,19 +1,7 @@
-package io.github.andrewmatzureff.arg.mob;
+package io.github.andrewmatzureff.arg.state;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import io.github.andrewmatzureff.arg.component.StateManager;
-import io.github.andrewmatzureff.arg.input.Command;
-import io.github.andrewmatzureff.arg.util.CopyPool;
-import lombok.Data;
 import lombok.Getter;
-
-import java.util.Optional;
-import java.util.function.Function;
-
-import static io.github.andrewmatzureff.arg.util.Optionals.peek;
-import static io.github.andrewmatzureff.arg.util.Optionals.remap;
-import static java.util.function.Predicate.not;
 
 public abstract class MobState implements Component {
 
