@@ -9,9 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import io.github.andrewmatzureff.arg.component.*;
-import io.github.andrewmatzureff.arg.component.mob.Jump;
 import io.github.andrewmatzureff.arg.component.mob.MobTraits;
-import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.state.*;
 import io.github.andrewmatzureff.arg.system.PhysicsManager;
 import lombok.Getter;
@@ -113,8 +111,8 @@ public class MapManager {
                     .add(new KeyboardBuffer())
                     .add(new GameplayCommandBuffer())
                     .add(new StateManager())
-                    .add(new Jump())
-                    .add(new Move())
+//                    .add(new Jump())
+//                    .add(new Move())
                     .add(new Transform())
                     .add(new AnimationController())
                     .add(new SpriteRenderer())

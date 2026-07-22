@@ -10,10 +10,12 @@ import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.input.KeyState;
 
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class GameplayInputCommandAdapterSystem extends IteratingSystem {
 
     private final Map<KeyState, Command> keyBindings = Map.of(
+        KeyState.NONE, Command.NO_OP,
         KeyState.Type.HELD.asKeyState(Input.Keys.A), Command.MOVE_LEFT,
         KeyState.Type.HELD.asKeyState(Input.Keys.D), Command.MOVE_RIGHT,
         KeyState.Type.HELD.asKeyState(Input.Keys.W), Command.MOVE_UP,
@@ -29,7 +31,10 @@ public class GameplayInputCommandAdapterSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         final var keyboard = KeyboardBuffer.MAPPER.get(entity);
         final var controller = GameplayCommandBuffer.MAPPER.get(entity);
-        try (var stream = keyboard.stream()) {
+        final var keys = keyboard.stream();
+        final var noop = Stream.of(KeyState.NONE);
+        // NOTE: refactor into Action (KeyState.Type, Command) abstraction?
+        try (var stream = Stream.concat(noop, keys)) {
             stream.filter(keyBindings::containsKey)
                 .map(keyBindings::get)
                 .forEach(controller::dispatch);

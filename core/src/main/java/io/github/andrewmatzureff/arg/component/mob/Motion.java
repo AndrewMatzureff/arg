@@ -3,75 +3,75 @@ package io.github.andrewmatzureff.arg.component.mob;
 import java.util.Set;
 
 public enum Motion implements MobTraits.Trait {
-    MOVING
-        , MOVING_X
-            , MOVING_X_POSITIVE
-            , MOVING_X_NEGATIVE
-        , MOVING_Y
-            , MOVING_Y_POSITIVE
-            , MOVING_Y_NEGATIVE
-        , MOVING_Z
-            , MOVING_Z_POSITIVE
-            , MOVING_Z_NEGATIVE
-        , MOVING_HORIZONTALLY
-            , MOVING_LEFTWARD
-            , MOVING_RIGHTWARD
-        , MOVING_VERTICALLY
-            , MOVING_UPWARD
-            , MOVING_DOWNWARD
-        , MOVING_ALONG_AXIS
-            , MOVING_FORWARD
-            , MOVING_BACKWARD;
+    ANY
+        , X
+            , X_POSITIVE
+            , X_NEGATIVE
+        , Y
+            , Y_POSITIVE
+            , Y_NEGATIVE
+        , Z
+            , Z_POSITIVE
+            , Z_NEGATIVE
+        , HORIZONTAL
+            , LEFT
+            , RIGHT
+        , VERTICAL
+            , UP
+            , DOWN
+        , DEPTH
+            , IN
+            , OUT;
 
     public Set<MobTraits.Trait> ancestors() {
         return switch (this) {
-            case MOVING -> Set.of(MOVING);
+            case ANY -> Set.of(ANY);
 
-            case MOVING_X -> Set.of(MOVING_X, MOVING);
-            case MOVING_Y -> Set.of(MOVING_Y, MOVING);
-            case MOVING_Z -> Set.of(MOVING_Z, MOVING);
-            case MOVING_HORIZONTALLY -> Set.of(MOVING_HORIZONTALLY, MOVING);
-            case MOVING_VERTICALLY -> Set.of(MOVING_VERTICALLY, MOVING);
-            case MOVING_ALONG_AXIS -> Set.of(MOVING_ALONG_AXIS, MOVING);
+            case X -> Set.of(X, ANY);
+            case Y -> Set.of(Y, ANY);
+            case Z -> Set.of(Z, ANY);
+            case HORIZONTAL -> Set.of(HORIZONTAL, ANY);
+            case VERTICAL -> Set.of(VERTICAL, ANY);
+            case DEPTH -> Set.of(DEPTH, ANY);
 
-            case MOVING_X_POSITIVE -> Set.of(MOVING_X_POSITIVE, MOVING_X, MOVING);
-            case MOVING_X_NEGATIVE -> Set.of(MOVING_X_NEGATIVE, MOVING_X, MOVING);
-            case MOVING_Y_POSITIVE -> Set.of(MOVING_Y_POSITIVE, MOVING_Y, MOVING);
-            case MOVING_Y_NEGATIVE -> Set.of(MOVING_Y_NEGATIVE, MOVING_Y, MOVING);
-            case MOVING_Z_POSITIVE -> Set.of(MOVING_Z_POSITIVE, MOVING_Z, MOVING);
-            case MOVING_Z_NEGATIVE -> Set.of(MOVING_Z_NEGATIVE, MOVING_Z, MOVING);
-            case MOVING_LEFTWARD -> Set.of(MOVING_LEFTWARD, MOVING_HORIZONTALLY, MOVING);
-            case MOVING_RIGHTWARD -> Set.of(MOVING_RIGHTWARD, MOVING_HORIZONTALLY, MOVING);
-            case MOVING_UPWARD -> Set.of(MOVING_UPWARD, MOVING_VERTICALLY, MOVING);
-            case MOVING_DOWNWARD -> Set.of(MOVING_DOWNWARD, MOVING_VERTICALLY, MOVING);
-            case MOVING_FORWARD -> Set.of(MOVING_FORWARD, MOVING_ALONG_AXIS, MOVING);
-            case MOVING_BACKWARD -> Set.of(MOVING_BACKWARD, MOVING_ALONG_AXIS, MOVING);
+            case X_POSITIVE -> Set.of(X_POSITIVE, X, ANY);
+            case X_NEGATIVE -> Set.of(X_NEGATIVE, X, ANY);
+            case Y_POSITIVE -> Set.of(Y_POSITIVE, Y, ANY);
+            case Y_NEGATIVE -> Set.of(Y_NEGATIVE, Y, ANY);
+            case Z_POSITIVE -> Set.of(Z_POSITIVE, Z, ANY);
+            case Z_NEGATIVE -> Set.of(Z_NEGATIVE, Z, ANY);
+            case LEFT -> Set.of(LEFT, HORIZONTAL, ANY);
+            case RIGHT -> Set.of(RIGHT, HORIZONTAL, ANY);
+            case UP -> Set.of(UP, VERTICAL, ANY);
+            case DOWN -> Set.of(DOWN, VERTICAL, ANY);
+            case IN -> Set.of(IN, DEPTH, ANY);
+            case OUT -> Set.of(OUT, DEPTH, ANY);
         };
     }
 
     public Set<MobTraits.Trait> descendants() {
         return switch (this) {
-            case MOVING -> Set.of(values());
+            case ANY -> Set.of(values());
 
-            case MOVING_X -> Set.of(MOVING_X, MOVING_X_POSITIVE, MOVING_X_NEGATIVE);
-            case MOVING_Y -> Set.of(MOVING_Y, MOVING_Y_POSITIVE, MOVING_Y_NEGATIVE);
-            case MOVING_Z -> Set.of(MOVING_Z, MOVING_Z_POSITIVE, MOVING_Z_NEGATIVE);
-            case MOVING_HORIZONTALLY -> Set.of(MOVING_HORIZONTALLY, MOVING_LEFTWARD, MOVING_RIGHTWARD);
-            case MOVING_VERTICALLY -> Set.of(MOVING_VERTICALLY, MOVING_UPWARD, MOVING_DOWNWARD);
-            case MOVING_ALONG_AXIS -> Set.of(MOVING_ALONG_AXIS, MOVING_FORWARD, MOVING_BACKWARD);
+            case X -> Set.of(X, X_POSITIVE, X_NEGATIVE);
+            case Y -> Set.of(Y, Y_POSITIVE, Y_NEGATIVE);
+            case Z -> Set.of(Z, Z_POSITIVE, Z_NEGATIVE);
+            case HORIZONTAL -> Set.of(HORIZONTAL, LEFT, RIGHT);
+            case VERTICAL -> Set.of(VERTICAL, UP, DOWN);
+            case DEPTH -> Set.of(DEPTH, IN, OUT);
 
-            case MOVING_LEFTWARD -> Set.of(MOVING_LEFTWARD);
-            case MOVING_RIGHTWARD -> Set.of(MOVING_RIGHTWARD);
-            case MOVING_UPWARD -> Set.of(MOVING_UPWARD);
-            case MOVING_DOWNWARD -> Set.of(MOVING_DOWNWARD);
-            case MOVING_FORWARD -> Set.of(MOVING_FORWARD);
-            case MOVING_BACKWARD -> Set.of(MOVING_BACKWARD);
-            case MOVING_X_POSITIVE -> Set.of(MOVING_X_POSITIVE);
-            case MOVING_X_NEGATIVE -> Set.of(MOVING_X_NEGATIVE);
-            case MOVING_Y_POSITIVE -> Set.of(MOVING_Y_POSITIVE);
-            case MOVING_Y_NEGATIVE -> Set.of(MOVING_Y_NEGATIVE);
-            case MOVING_Z_POSITIVE -> Set.of(MOVING_Z_POSITIVE);
-            case MOVING_Z_NEGATIVE -> Set.of(MOVING_Z_NEGATIVE);
+            case LEFT -> Set.of(LEFT);
+            case RIGHT -> Set.of(RIGHT);
+            case UP -> Set.of(UP);
+            case DOWN -> Set.of(DOWN);
+            case IN -> Set.of(IN);
+            case OUT -> Set.of(OUT);
+            case X_POSITIVE -> Set.of(X_POSITIVE);
+            case X_NEGATIVE -> Set.of(X_NEGATIVE);
+            case Y_POSITIVE -> Set.of(Y_POSITIVE);
+            case Y_NEGATIVE -> Set.of(Y_NEGATIVE);
+            case Z_POSITIVE -> Set.of(Z_POSITIVE);
+            case Z_NEGATIVE -> Set.of(Z_NEGATIVE);
         };
     }
 }

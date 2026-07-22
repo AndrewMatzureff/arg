@@ -2,10 +2,11 @@ package io.github.andrewmatzureff.arg.component.mob;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
+import io.github.andrewmatzureff.arg.util.Restorable;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Jump implements Component {
+public class Jump implements Restorable, Component {
     public static final ComponentMapper<Jump> MAPPER = ComponentMapper.getFor(Jump.class);
 
     private static final long invalid_trigger_time = Long.MAX_VALUE;
@@ -20,13 +21,14 @@ public class Jump implements Component {
         return getTriggerTimeMillis() != invalid_trigger_time;
     }
 
-    public void begin() {
+    public void jump() {
         final int delayMillis = getDelayMillis();
         final long now = System.currentTimeMillis();
         setTriggerTimeMillis(now + delayMillis);
     }
 
-    public void end() {
+    @Override
+    public void restore() {
         setTriggerTimeMillis(invalid_trigger_time);
     }
 }

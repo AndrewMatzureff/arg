@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static io.github.andrewmatzureff.arg.util.ComponentMappers.maybe;
 import static io.github.andrewmatzureff.arg.util.Optionals.*;
 
 public abstract class AbstractMobStateIteratingSystem <T extends MobState> extends IteratingSystem {
@@ -26,7 +27,6 @@ public abstract class AbstractMobStateIteratingSystem <T extends MobState> exten
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-//        System.out.println("entity.getComponents(): " + Arrays.stream(entity.getComponents().toArray(Component.class)).filter(MobState.class::isInstance).toList());
         try (final var stream = some(entity)
             .map(GameplayCommandBuffer.MAPPER::get)
             .map(GameplayCommandBuffer::stream)
@@ -34,9 +34,9 @@ public abstract class AbstractMobStateIteratingSystem <T extends MobState> exten
             stream.forEach(command -> handle(command, entity, deltaTime));
         }
 
-        final var state = mapper()
-            .get(entity);
-        final var phase = state.getPhase();
+        final var phase = maybe(entity, type)
+            .map(MobState::getPhase)
+            .orElseThrow(); // TODO: throw a more descriptive error
         switch (phase) {
             case ENTER -> onEnter(entity, deltaTime);
             case UPDATE -> onUpdate(entity, deltaTime);
@@ -46,14 +46,14 @@ public abstract class AbstractMobStateIteratingSystem <T extends MobState> exten
 
     private void onEnter(Entity entity, float deltaTime) {
         enter(entity, deltaTime);
-        mapper()
-            .get(entity)
-            .commit();
+        maybe(entity, type)
+            .ifPresentOrElse(MobState::commit
+                , () -> {throw new RuntimeException("Something went wrong..."); /* TODO: throw a more descriptive error */});
     }
 
     private void onUpdate(Entity entity, float deltaTime) {
-        final var state = mapper()
-            .get(entity);
+        final var state = maybe(entity, type)
+            .orElseThrow(); // TODO: throw a more descriptive error
         update(entity, deltaTime)
             .ifPresent(state::transition);
     }
@@ -63,7 +63,8 @@ public abstract class AbstractMobStateIteratingSystem <T extends MobState> exten
         some(type)
             .map(entity::remove)
             .map(MobState::getNext)
-            .ifPresentOrElse(entity::add, () -> {throw new RuntimeException("Something went wrong..."); /* TODO: throw a more descriptive error */});
+            .ifPresentOrElse(entity::add
+                , () -> {throw new RuntimeException("Something went wrong..."); /* TODO: throw a more descriptive error */});
     }
 
     protected void handle(Command command, Entity entity, float deltaTime) {}

@@ -12,8 +12,8 @@ import io.github.andrewmatzureff.arg.util.Optionals;
 
 import java.util.Optional;
 
-import static io.github.andrewmatzureff.arg.util.Optionals.none;
-import static io.github.andrewmatzureff.arg.util.Optionals.some;
+import static io.github.andrewmatzureff.arg.util.ComponentMappers.get;
+import static io.github.andrewmatzureff.arg.util.Optionals.*;
 
 public class MobJumpStateSystem extends AbstractMobStateIteratingSystem<MobJumpState> {
 
@@ -23,9 +23,16 @@ public class MobJumpStateSystem extends AbstractMobStateIteratingSystem<MobJumpS
 
     @Override
     public void handle(Command command, Entity entity, float deltaTime) {
+        final var rigidBody = get(entity, RigidBody.class);
         switch (command) {
-            case MOVE_LEFT -> Move.MAPPER.get(entity).left(0.5f);
-            case MOVE_RIGHT -> Move.MAPPER.get(entity).right(0.5f);
+            case NO_OP -> {}
+            case MOVE_LEFT -> {
+                rigidBody.addLinearMotion(-1f, 0f);
+            }
+            case MOVE_RIGHT -> {
+                rigidBody.addLinearMotion(1f, 0f);
+            }
+            case JUMP -> {}
         }
     }
 
@@ -44,13 +51,9 @@ public class MobJumpStateSystem extends AbstractMobStateIteratingSystem<MobJumpS
 
     @Override
     public Optional<MobState> update(Entity entity, float deltaTime) {
-        final var jump = Jump.MAPPER.get(entity);
-        final var move = Move.MAPPER.get(entity);
-        final var traits = MobTraits.MAPPER.get(entity);
-        final var rigidBodyBox = RigidBody.MAPPER.get(entity);
         final var animationController = AnimationController.MAPPER.get(entity);
-//        if (traits.have(Maneuver.POST_JUMP)) move.up(75f);
-        if (traits.have(Timing.ANIMATION_FINISHED) && rigidBodyBox.getBody().getLinearVelocity().y <= 0) return  some(new MobFallState());
+        if (animationController.isFinished())
+            return some(new MobFallState());
         return none();
     }
 

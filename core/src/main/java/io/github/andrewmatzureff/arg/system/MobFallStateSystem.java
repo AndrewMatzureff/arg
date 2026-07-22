@@ -4,9 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.animation.reels.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
-import io.github.andrewmatzureff.arg.component.mob.MobTraits;
-import io.github.andrewmatzureff.arg.component.mob.Motion;
-import io.github.andrewmatzureff.arg.component.mob.Move;
+import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.state.MobFallState;
 import io.github.andrewmatzureff.arg.state.MobLandState;
@@ -14,20 +12,29 @@ import io.github.andrewmatzureff.arg.state.MobState;
 
 import java.util.Optional;
 
+import static io.github.andrewmatzureff.arg.util.ComponentMappers.*;
 import static io.github.andrewmatzureff.arg.util.Optionals.*;
 
 public class MobFallStateSystem extends AbstractMobStateIteratingSystem<MobFallState> {
 
     public MobFallStateSystem() {
-        super(MobFallState.class, MobTraits.class);
+        super(MobFallState.class);
     }
 
     @Override
     protected void handle(Command command, Entity entity, float deltaTime) {
 
         switch (command) {
-            case MOVE_LEFT -> Move.MAPPER.get(entity).left(0.5f);
-            case MOVE_RIGHT -> Move.MAPPER.get(entity).right(0.5f);
+            case NO_OP -> {}
+            case MOVE_LEFT -> {
+                final var rigidBody = get(entity, RigidBody.class);
+                rigidBody.addLinearMotion(-1f, 0f);
+            }
+            case MOVE_RIGHT -> {
+                final var rigidBody = get(entity, RigidBody.class);
+                rigidBody.addLinearMotion(1f, 0f);
+            }
+            case JUMP -> {}
         }
     }
 
@@ -38,6 +45,7 @@ public class MobFallStateSystem extends AbstractMobStateIteratingSystem<MobFallS
 
     @Override
     protected void enter(Entity entity, float deltaTime) {
+        // TODO: implement animation queueing so that non-interrupting transitions do not need to be orchestrated by state handlers
         Optional.of(entity)
             .map(AnimationController.MAPPER::get)
             .ifPresent(ac -> ac.setAnimation(Player.Clip.FALL.animation()));
@@ -45,8 +53,10 @@ public class MobFallStateSystem extends AbstractMobStateIteratingSystem<MobFallS
 
     @Override
     protected Optional<MobState> update(Entity entity, float deltaTime) {
-        final var traits = MobTraits.MAPPER.get(entity);
-        if (traits.have(Motion.MOVING_Y_POSITIVE) || traits.lack(Motion.MOVING)) return some(new MobLandState());
+        // TODO: remove mob traits construct and go back to raw component manipulation...?
+        final var rigidBody = get(entity, RigidBody.class);
+        if (rigidBody.isGrounded())
+            return some(new MobLandState());
         return none();
     }
 

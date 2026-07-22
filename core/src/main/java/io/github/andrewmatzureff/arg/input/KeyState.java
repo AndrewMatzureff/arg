@@ -1,10 +1,13 @@
 package io.github.andrewmatzureff.arg.input;
 
+import com.badlogic.gdx.Input;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public record KeyState(Type type, int key) {
+    public static final KeyState NONE = new KeyState(null, Input.Keys.UNKNOWN);
 
     public enum Type {
 

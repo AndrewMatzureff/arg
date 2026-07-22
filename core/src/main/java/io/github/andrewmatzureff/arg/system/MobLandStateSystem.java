@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.animation.reels.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
-import io.github.andrewmatzureff.arg.component.mob.Move;
+import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.state.MobIdleState;
 import io.github.andrewmatzureff.arg.state.MobLandState;
@@ -13,6 +13,7 @@ import io.github.andrewmatzureff.arg.util.Optionals;
 
 import java.util.Optional;
 
+import static io.github.andrewmatzureff.arg.util.ComponentMappers.get;
 import static io.github.andrewmatzureff.arg.util.Optionals.none;
 import static io.github.andrewmatzureff.arg.util.Optionals.some;
 
@@ -25,8 +26,9 @@ public class MobLandStateSystem extends AbstractMobStateIteratingSystem<MobLandS
     @Override
     public void handle(Command command, Entity entity, float deltaTime) {
         switch (command) {
-            case MOVE_LEFT -> Move.MAPPER.get(entity).left(0.5f);
-            case MOVE_RIGHT -> Move.MAPPER.get(entity).right(0.5f);
+            case NO_OP -> {}
+            case MOVE_LEFT -> get(entity, RigidBody.class).addLinearMotion(-1, 0);
+            case MOVE_RIGHT -> get(entity, RigidBody.class).addLinearMotion(1, 0);
         }
     }
 
@@ -46,7 +48,8 @@ public class MobLandStateSystem extends AbstractMobStateIteratingSystem<MobLandS
     @Override
     public Optional<MobState> update(Entity entity, float deltaTime) {
         final var animationController = AnimationController.MAPPER.get(entity);
-        if (animationController.isFinished()) return some(new MobIdleState());
+        if (animationController.isFinished())
+            return some(new MobIdleState());
         return none();
     }
 

@@ -27,6 +27,8 @@ public class AnimationController implements Component {
 
     public boolean isFinished() {return animation.isAnimationFinished(stateTime);}
 
+    public boolean isActive() {return animation != null;}
+
     // static \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     public static final ComponentMapper<AnimationController> MAPPER = ComponentMapper.getFor(AnimationController.class);

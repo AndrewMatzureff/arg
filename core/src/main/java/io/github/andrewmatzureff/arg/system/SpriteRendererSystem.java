@@ -23,6 +23,8 @@ public class SpriteRendererSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         final var spriteRenderer = SpriteRenderer.MAPPER.get(entity);
         final var frame = spriteRenderer.getSprite();
+        if (frame.getBoundingRectangle()
+            .area() == 0) return;
         final var transform = Transform.MAPPER.get(entity);
         final var position = transform.getPosition();
         final var rigidBodyBox = RigidBody.MAPPER.get(entity);

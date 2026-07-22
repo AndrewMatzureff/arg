@@ -5,16 +5,12 @@ import com.badlogic.ashley.core.Entity;
 import io.github.andrewmatzureff.arg.animation.reels.Player;
 import io.github.andrewmatzureff.arg.component.AnimationController;
 import io.github.andrewmatzureff.arg.component.RigidBody;
-import io.github.andrewmatzureff.arg.component.mob.Jump;
-import io.github.andrewmatzureff.arg.component.mob.Maneuver;
-import io.github.andrewmatzureff.arg.component.mob.MobTraits;
-import io.github.andrewmatzureff.arg.component.mob.Move;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.state.*;
 
 import java.util.Optional;
 
-import static com.badlogic.gdx.math.MathUtils.isZero;
+import static io.github.andrewmatzureff.arg.util.ComponentMappers.get;
 import static io.github.andrewmatzureff.arg.util.Optionals.*;
 
 public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkState> {
@@ -25,23 +21,18 @@ public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkS
 
     @Override
     public void handle(Command command, Entity entity, float deltaTime) {
-        final var move = Move.MAPPER.get(entity);
-        final var rigidBodyBox = RigidBody.MAPPER.get(entity);
-        final var body = rigidBodyBox.getBody();
+        final var rigidBody = get(entity, RigidBody.class);
         switch (command) {
+            case NO_OP -> {}
             case MOVE_LEFT -> {
-                move.left(1f);
-                body.applyTorque(move.getDirection().x * 255f, true);
+                rigidBody.addLinearMotion(-1f, 0f);
             }
             case MOVE_RIGHT -> {
-                move.right(1f);
-                body.applyTorque(move.getDirection().x * 255f, true);
+                rigidBody.addLinearMotion(1f, 0f);
             }
             case JUMP -> {
-                Jump.MAPPER.get(entity)
-                    .begin();
+                rigidBody.addLinearThrust(0f, 1f);
             }
-            default -> {}
         }
     }
 
@@ -60,10 +51,14 @@ public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkS
 
     @Override
     public Optional<MobState> update(Entity entity, float deltaTime) {
-        final var traits = MobTraits.MAPPER.get(entity);
-        if (traits.have(Maneuver.JUMPING)) return some(new MobJumpState());
-        final var move = Move.MAPPER.get(entity);
-        if (isZero(move.getDirection().x)) return some(new MobIdleState());
+        final var rigidBody = get(entity, RigidBody.class);
+        if (!rigidBody.isGrounded() ||
+            rigidBody.hasAngularMotion())
+            return some(new MobFallState());
+        if (rigidBody.hasLinearThrust())
+            return some(new MobJumpState());
+        if (!rigidBody.hasLinearMotion())
+            return some(new MobIdleState());
         return none();
     }
 
