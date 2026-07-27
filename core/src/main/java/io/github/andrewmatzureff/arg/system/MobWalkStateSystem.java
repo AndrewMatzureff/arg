@@ -8,12 +8,15 @@ import io.github.andrewmatzureff.arg.component.RigidBody;
 import io.github.andrewmatzureff.arg.input.Command;
 import io.github.andrewmatzureff.arg.state.*;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static io.github.andrewmatzureff.arg.util.ComponentMappers.get;
 import static io.github.andrewmatzureff.arg.util.Optionals.*;
 
 public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkState> {
+    private final Set<Entity> jumps = new HashSet<>();
 
     public MobWalkStateSystem() {
         super(MobWalkState.class);
@@ -31,7 +34,7 @@ public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkS
                 rigidBody.addLinearMotion(1f, 0f);
             }
             case JUMP -> {
-                rigidBody.addLinearThrust(0f, 1f);
+                jumps.add(entity);
             }
         }
     }
@@ -52,10 +55,9 @@ public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkS
     @Override
     public Optional<MobState> update(Entity entity, float deltaTime) {
         final var rigidBody = get(entity, RigidBody.class);
-        if (!rigidBody.isGrounded() ||
-            rigidBody.hasAngularMotion())
+        if (!rigidBody.isGrounded())
             return some(new MobFallState());
-        if (rigidBody.hasLinearThrust())
+        if (jumps.remove(entity))
             return some(new MobJumpState());
         if (!rigidBody.hasLinearMotion())
             return some(new MobIdleState());
@@ -64,5 +66,6 @@ public class MobWalkStateSystem extends AbstractMobStateIteratingSystem<MobWalkS
 
     @Override
     public void exit(Entity entity, float deltaTime) {
+        jumps.clear();
     }
 }

@@ -19,11 +19,11 @@ public class RigidBody implements Component, Restorable { //Traits<RigidBody, Ri
     private final   @Getter boolean debugDraw = false;
 
     // flags
-    private @Setter @Getter boolean grounded;
     private @Setter @Getter boolean upright;
     // TODO: falling, inert, equilibrium...?
 
     // accumulators
+    private @Getter boolean grounded;
     private @Setter @Getter float angularMotion = 0;
     private @Setter @Getter float angularThrust = 0;
     private final Vector2 linearMotion = new Vector2();
@@ -42,6 +42,7 @@ public class RigidBody implements Component, Restorable { //Traits<RigidBody, Ri
         bodyDef.type = type;
         bodyDef.position.set(position);
         this.body = world.createBody(bodyDef);
+        body.setUserData(this);
         fixtureDefs.forEach(body::createFixture);
         fixtureDefs.forEach(def -> def.shape.dispose()); // TODO: implement pooling strategy
         // average human density: 985kg/m^3
@@ -51,6 +52,8 @@ public class RigidBody implements Component, Restorable { //Traits<RigidBody, Ri
 
     public Vector2 getLinearMotion() {return vectorPool.obtain(linearMotion);}
     public Vector2 getLinearThrust() {return vectorPool.obtain(linearThrust);}
+
+    public void addGrounded() {grounded = true;}
 
     public void addLinearMotion(float x, float y) {
         // NOTE: maybe make this and others abstract so that more complex rigid bodies can define their own modes of locomotion
@@ -83,6 +86,7 @@ public class RigidBody implements Component, Restorable { //Traits<RigidBody, Ri
         linearThrust.set(Vector2.Zero);
         angularMotion = 0;
         angularThrust = 0;
+        grounded = false;
     }
 
     // static \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

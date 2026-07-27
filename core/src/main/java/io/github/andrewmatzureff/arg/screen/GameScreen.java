@@ -34,18 +34,18 @@ public class GameScreen implements Screen {
 
         // clear traits
         this.engine.addSystem(new TraitResetSystem());
-        // update logic state & add traits
-        this.engine.addSystem(animationSystem);
-        this.engine.addSystem(new PhysicsControllerSystem());
-        this.engine.addSystem(new CameraControlSystem(game.getCamera()));
-        this.engine.addSystem(spriteRendererSystem);
-        this.engine.addSystem(gameplayInputCommandAdapterSystem);
         // update mob states
         this.engine.addSystem(new MobFallStateSystem());
         this.engine.addSystem(new MobLandStateSystem());
         this.engine.addSystem(new MobIdleStateSystem());
         this.engine.addSystem(new MobWalkStateSystem());
         this.engine.addSystem(new MobJumpStateSystem());
+        // update logic state & add traits
+        this.engine.addSystem(animationSystem);
+        this.engine.addSystem(new PhysicsControllerSystem());
+        this.engine.addSystem(new CameraControlSystem(game.getCamera()));
+        this.engine.addSystem(spriteRendererSystem);
+        this.engine.addSystem(gameplayInputCommandAdapterSystem);
 
         mapManager = new MapManager(engine, physicsManager);
         mapManager.load("test.tmx");
